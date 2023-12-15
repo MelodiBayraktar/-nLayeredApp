@@ -1,8 +1,11 @@
+using Business.Messages;
+using Core.Business.Rules;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 
 namespace Business.Rules;
 
-public class ProductBusinessRules
+public class ProductBusinessRules :BaseBusinessRules
 {
     private readonly IProductDal _productDal;
 
@@ -11,12 +14,13 @@ public class ProductBusinessRules
         _productDal = productDal;
     }
 
-    public async Task MaksimumCountIsTwenty()
+    public async Task MaximumCountIsTwenty(int categoryId)
     {
-        var result = await _productDal.GetListAsync();
-        if (result.Count == 10)
+        var result = await _productDal.GetListAsync(
+            predicate:p => p.CategoryId == categoryId, size:25);
+        if (result.Count >= 20)
         {
-            throw new Exception("Kategori limiti aşıldı.");
+            throw new BusinessException(BusinessMessages.CategoryProductLimit);
         }
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Dtos.Responses;
+using Business.Rules;
 using Core.DataAccess.Paging;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -13,14 +14,15 @@ public class ProductManager:IProductService
 {
     private IProductDal _productDal;
     private IMapper _mapper;
-
-    public ProductManager(IProductDal productDal, IMapper mapper)
+    private ProductBusinessRules _productBusinessRules;
+    
+    public ProductManager(IProductDal productDal, IMapper mapper, ProductBusinessRules productBusinessRules)
     {
         _productDal = productDal;
         _mapper = mapper;
+        _productBusinessRules = productBusinessRules;
     }
-    
-    //GetListProductResponse
+
     public async Task<IPaginate<GetListedProductResponse>> GetListAsync()
     {
         // //paginate içinde product listesi
@@ -64,6 +66,7 @@ public class ProductManager:IProductService
 
     public async Task<CreatedProductResponse> Add(CreateProductRequest createProductRequest)
     {
+        await _productBusinessRules.MaximumCountIsTwenty(createProductRequest.CategoryId);
        //  Product product = new Product();
        //  product.Id = Guid.NewGuid();
        //  product.ProductName = createProductRequest.ProductName;

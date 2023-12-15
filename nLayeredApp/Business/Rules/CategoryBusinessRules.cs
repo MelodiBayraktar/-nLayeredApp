@@ -1,8 +1,11 @@
+using Business.Messages;
+using Core.Business.Rules;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 
 namespace Business.Rules;
 
-public class CategoryBusinessRules
+public class CategoryBusinessRules: BaseBusinessRules
 {
     private readonly ICategoryDal _categoryDal;
 
@@ -14,9 +17,9 @@ public class CategoryBusinessRules
     public async Task MaksimumCountIsTen()
     {
         var result = await _categoryDal.GetListAsync();
-        if (result.Count == 10)
+        if (result.Count >= 10)
         {
-            throw new Exception("Kategori limiti aşıldı.");
+            throw new BusinessException(BusinessMessages.CategoryLimit);
         }
     }
 }

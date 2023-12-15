@@ -21,17 +21,30 @@ namespace WebApi
              _productService = productService;
          }
 
-         [HttpPost]
+         [HttpPost("Add")]
          public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
          {
              var result = await _productService.Add(createProductRequest);
              return Ok(result);
          }
 
-         [HttpGet]
+         [HttpGet("GetList")]
          public async Task<IActionResult> GetList()
          {
              var result = await _productService.GetListAsync(); 
+             return Ok(result);
+         }
+
+         [HttpPost("Delete")]
+         public async Task<IActionResult> Delete([FromBody] DeleteProductRequest deleteProductRequest)
+         {
+             var result = await _productService.Delete(deleteProductRequest);
+             return Ok(result);
+         }
+         [HttpPost("Update")]
+         public async Task<IActionResult> Update([FromBody] UpdateProductRequest updateProductRequest)
+         {
+             var result = await _productService.Update(updateProductRequest);
              return Ok(result);
          }
     }

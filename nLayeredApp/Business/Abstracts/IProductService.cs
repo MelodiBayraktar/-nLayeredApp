@@ -9,4 +9,8 @@ public interface IProductService
 { 
    Task<IPaginate<GetListedProductResponse>> GetListAsync();
    Task<CreatedProductResponse> Add(CreateProductRequest createProductRequest);
+   Task<DeletedProductResponse> Delete(DeleteProductRequest deleteProductRequest);
+   
+   Task<UpdatedProductResponse> Update(UpdateProductRequest updateProductRequest);
+
 }

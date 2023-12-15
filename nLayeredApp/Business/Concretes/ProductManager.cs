@@ -89,4 +89,18 @@ public class ProductManager:IProductService
        
     }
 
+    public async Task<DeletedProductResponse> Delete(DeleteProductRequest deleteProductRequest)
+    {
+        Product deleteProduct = await _productDal.GetAsync(p => p.Id == deleteProductRequest.Id);
+        await _productDal.DeleteAsync(deleteProduct);
+        return _mapper.Map<DeletedProductResponse>(deleteProduct);
+    }
+
+    public async Task<UpdatedProductResponse> Update(UpdateProductRequest updateProductRequest)
+    {
+        Product updateProduct = await _productDal.GetAsync(p => p.Id == updateProductRequest.Id);
+        _mapper.Map(updateProductRequest, updateProduct);
+        Product updatedProduct = await _productDal.UpdateAsync(updateProduct);
+        return _mapper.Map<UpdatedProductResponse>(updatedProduct);
+    }
 }
